@@ -108,3 +108,36 @@ v1 restored
 Health Check
       ↓
 PASS ✓
+
+Secondary Use Cases:
+1. Infrastructure consistency
+Dev and Prod use the same Terraform modules:
+Reusable modules
+       ↓
+ ┌─────┴─────┐
+ Dev        Prod
+Reducing configuration drift.
+2. Security enforcement
+Every infrastructure change goes through:
+Terraform
+   ↓
+Checkov
+   ↓
+Security findings
+   ↓
+Pass / Fail
+3. Operational health
+The platform continuously checks:
+- application availability
+- response status
+- latency
+- container health
+- Kubernetes replicas
+- deployment status
+4. Developer self-service
+A developer doesn't need to manually execute 15 commands.
+git push
+   ↓
+automation
+   ↓
+validated deployment
