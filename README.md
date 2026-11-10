@@ -35,47 +35,28 @@ CloudForge automatically:
 9. Detects deployment failure
 10. Automatically rolls back to the previous healthy version
 
-End-to-End Workflow
-Developer
-   │
-   │ Git Push / Pull Request
-   ▼
-GitHub Repository
-   │
-   ▼
-GitHub Actions
-   │
-   ├── Terraform Format
-   ├── Terraform Validate
-   ├── Security Scan
-   ├── Python Tests
-   ├── Docker Build
-   └── Kubernetes Validation
-          │
-          ▼
-     Deployment
-          │
-          ▼
-   Kubernetes / kind
-          │
-     ┌────┴────┐
-     │         │
-   App       Service
-     │         │
-     └────┬────┘
-          ▼
-     Health Checks
-          │
-     ┌────┴────┐
-     │         │
-   Healthy   Failed
-     │         │
-     ▼         ▼
- Monitor    Rollback
-     │         │
-     └────┬────┘
-          ▼
-   Final Validation
+End-to-End Workflow:
+```mermaid
+flowchart TD
+    A[Developer Push / Pull Request] --> B[GitHub Repository]
+    B --> C[GitHub Actions]
+    
+    subgraph Pipeline [CI/CD Validation & Build Pipeline]
+        C --> D1[Terraform Format]
+        C --> D2[Terraform Validate]
+        C --> D3[Security Scan]
+        C --> D4[Python Tests]
+        C --> D5[Docker Build]
+        C --> D6[Kubernetes Validation]
+    end
+
+    Pipeline --> E[Local Kubernetes Environment Deployment]
+    E --> F[Health Checks & Monitoring]
+    
+    F -->|Pass| G[Healthy Deployment]
+    F -->|Failure Detected| H[Automatic Rollback to Previous Version]
+
+
 
    The interesting use case: failure recovery
    Normal deployment
